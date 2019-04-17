@@ -1,6 +1,10 @@
+package servidor.model;
+
+import java.util.*;
 public class Calendario {
 
-  public static final String [2] dias = {"HOY", "MAÑANA"};
+  public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
+  public static final String [] dias = {"HOY", "MAÑANA"};
 
   private Map<String,Sala> salas;
   private List<String> uvusReservantes;

@@ -1,3 +1,5 @@
+package servidor.model;
+
 public class Usuario {
 
   private String uvus;
@@ -16,7 +18,7 @@ public class Usuario {
     this.uvus = usuario;
   }
 
-  public boolean getPassword(){
+  public String getPassword(){
     return this.password;
   }
 

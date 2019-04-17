@@ -1,6 +1,6 @@
-public class Turno {
+package servidor.model;
 
-  public static final String [6] horasTurnos = {"8:00-10:00", "10:00-12:00", "12:00-14:00", "16:00-18:00", "18:00-20:00"};
+public class Turno {
 
   private boolean reservado;
   private String uvusReservante;
@@ -20,6 +20,10 @@ public class Turno {
   }
 
   public boolean comprobarReserva(String uvus) {
-    return this.uvus == uvus;
+    boolean result = false;
+    if(this.uvusReservante == uvus){
+      result = true;
+    }
+    return result;
   }
 }

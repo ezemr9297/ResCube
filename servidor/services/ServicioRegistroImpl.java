@@ -1,13 +1,18 @@
+package servidor.services;
+
 import java.io.*;
+import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
+import servidor.services.interfaces.*;
+import servidor.model.*;
 
-class ServicioRegistroImpl extends UnicastRemoteObject implements ServicioRegistro {
+public class ServicioRegistroImpl extends UnicastRemoteObject implements ServicioRegistro {
 
   PrintWriter fd;
   List<Registro> historial;
 
-  ServicioLogImpl(String f) throws RemoteException {
+  public ServicioRegistroImpl(String f) throws RemoteException {
 
     historial = new LinkedList<Registro>();
 
@@ -33,13 +38,22 @@ class ServicioRegistroImpl extends UnicastRemoteObject implements ServicioRegist
     }
 
     historial.add(new Registro(nombre, accion, sala, turno));
+    String actividad;
+
+    Calendar c = Calendar.getInstance();
+    String dia_fecha = Integer.toString(c.get(Calendar.DATE));
+    String mes = Integer.toString(c.get(Calendar.MONTH));
+    String annio = Integer.toString(c.get(Calendar.YEAR));
+    String hora =Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+    String minutos = Integer.toString(c.get(Calendar.MINUTE));
+    String segundos = Integer.toString(c.get(Calendar.SECOND));
 
     if(tipo=true){
-      String actividad = año+"-"+mes+"-"+dia+":"+hora+":"+minutos+":"+segundos+" --> USUARIO: "+nombre+" ACCION: "+accion+
+      actividad = annio+"-"+mes+"-"+dia_fecha+":"+hora+":"+minutos+":"+segundos+" --> USUARIO: "+nombre+" ACCION: "+accion+
       " SALA: "+sala+" TURNO: "+turno+" DIA: "+dia;
     }
     else{
-      String actividad = año+"-"+mes+"-"+dia+":"+hora+":"+minutos+":"+segundos+" --> USUARIO: "+nombre+" ACCION: "+accion;
+      actividad = annio+"-"+mes+"-"+dia_fecha+":"+hora+":"+minutos+":"+segundos+" --> USUARIO: "+nombre+" ACCION: "+accion;
     }
 
     fd.println(actividad);
@@ -48,6 +62,8 @@ class ServicioRegistroImpl extends UnicastRemoteObject implements ServicioRegist
   }
 
   public List<Registro> getHistorial(String uvus) {
+    List<Registro> h = new LinkedList<Registro>();
+    return h;
     // TO-DO
   }
 }

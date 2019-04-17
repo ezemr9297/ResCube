@@ -1,7 +1,9 @@
 import java.rmi.*;
 import java.rmi.server.*;
 
-class ServidorCube {
+import servidor.services.*;
+
+public class ServidorReserva {
 
     static public void main (String args[]) {
 
@@ -13,8 +15,8 @@ class ServidorCube {
             System.setSecurityManager(new RMISecurityManager());
         }
         try {
-            ServicioLogInImpl srv = new ServidorCubeImpl();
-            Naming.rebind("rmi://localhost:" + args[0] + "/Log", srv);
+            ServicioReservaImpl srv = new ServicioReservaImpl();
+            Naming.rebind("rmi://localhost:" + args[0] + "/Reserva", srv);
         }
         catch (RemoteException e) {
             System.err.println("Error de comunicacion: " + e.toString());
