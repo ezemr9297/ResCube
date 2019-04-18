@@ -93,7 +93,7 @@ public class ServicioReservaImpl extends UnicastRemoteObject implements Servicio
     return permitido;
   }
 
-  /*ServicioLogIn creaLogIn(String uvus) throws RemoteExcpetion{
-    return new ServicioLogInImpl(uvus);
-  }*/
+  public ServicioLogIn creaLogIn() throws RemoteException{
+    return new ServicioLogInImpl();
+  }
 }

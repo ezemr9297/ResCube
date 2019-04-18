@@ -24,4 +24,8 @@ public class Registro implements Serializable {
     " Sala: "+sala+" Turno: "+turno;
     return s;
   }
+
+  public String getUvus(){
+    return this.uvus;
+  }
 }

@@ -63,7 +63,11 @@ public class ServicioRegistroImpl extends UnicastRemoteObject implements Servici
 
   public List<Registro> getHistorial(String uvus) {
     List<Registro> h = new LinkedList<Registro>();
+    for(Registro temp : historial){
+      if(temp.getUvus().equals(uvus)){
+        h.add(temp);
+      }
+    }
     return h;
-    // TO-DO
   }
 }
