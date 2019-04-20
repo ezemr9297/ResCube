@@ -1,6 +1,8 @@
 package servidor.model;
 
 import java.util.*;
+import java.util.HashMap;
+
 public class Calendario {
 
   public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
@@ -11,6 +13,7 @@ public class Calendario {
 
   public Calendario(){
     uvusReservantes = new ArrayList<String> ();
+    salas = new HashMap<String,Sala>();
     // Creamos las salas y le asignamos un nombre
     for (String nomSala : Sala.nomSalas) {
       salas.put(nomSala, new Sala());

@@ -70,4 +70,5 @@ public class ServicioRegistroImpl extends UnicastRemoteObject implements Servici
     }
     return h;
   }
+  
 }

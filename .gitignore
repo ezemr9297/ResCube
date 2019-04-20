@@ -1,4 +1,1 @@
-servidor/model/*.class
-servidor/services/interfaces/*.class
-servidor/services/*.class
-servidor/*.class
+*.class

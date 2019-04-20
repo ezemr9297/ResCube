@@ -1,6 +1,8 @@
 package servidor.model;
 
 import java.util.Map;
+import java.util.HashMap;
+
 public class Sala {
 
   public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
@@ -8,6 +10,7 @@ public class Sala {
   private Map<String,Turno> turnos;
 
   public Sala(){
+    turnos = new HashMap<String,Turno>();
     // Creamos los turnos de la sala
     for (String hora : horasTurnos) {
       turnos.put(hora, new Turno());
