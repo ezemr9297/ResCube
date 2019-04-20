@@ -9,4 +9,5 @@ public interface ServicioReserva extends Remote {
 	public boolean reservarSala (int dia, int sala, int turno, String uvus) throws RemoteException;
   public boolean borrarReserva(int dia,int nSala, int nTurno, String uvus) throws RemoteException;
   public ServicioLogIn creaLogIn() throws RemoteException;
+  public ServicioRegistro obtenerServRegistro() throws RemoteException;
 }

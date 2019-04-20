@@ -15,7 +15,8 @@ public class ServicioReservaImpl extends UnicastRemoteObject implements Servicio
   public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
   public static final String [] dias = {"HOY", "MAÑANA"};
 
-  private ServicioRegistroImpl log;
+  private ServicioLogIn login;
+  private ServicioRegistro log;
   private String fichero = "Acciones_realizadas";
   private Calendario [] calendario;
 
@@ -25,7 +26,8 @@ public class ServicioReservaImpl extends UnicastRemoteObject implements Servicio
     calendario[0]= new Calendario();
     calendario[1]= new Calendario();
 
-    log = new ServicioRegistroImpl(fichero);
+    login = new ServicioLogInImpl();
+    log = new ServicioRegistroImpl(this.fichero);
   }
 
 
@@ -93,7 +95,11 @@ public class ServicioReservaImpl extends UnicastRemoteObject implements Servicio
     return permitido;
   }
 
-  public ServicioLogIn creaLogIn() throws RemoteException{
-    return new ServicioLogInImpl();
+  public ServicioLogIn creaLogIn() throws RemoteException {
+    return this.login;
+  }
+
+  public ServicioRegistro obtenerServRegistro() throws RemoteException {
+    return this.log;
   }
 }

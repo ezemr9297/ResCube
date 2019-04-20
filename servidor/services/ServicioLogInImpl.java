@@ -15,38 +15,37 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
       usuarios= new LinkedList<Usuario>();
     }
 
-    public LinkedList <Usuario> iniciarSesion(String uvus, String password){
-      return usuarios;
+    public boolean iniciarSesion(String uvus, String password){
+      boolean usuarioValido;
+      for (Usuario usuario : this.usuarios) {
+        if (usuario.getUvus().equals(uvus) && usuario.getPassword().equals(password))
+          usuarioValido = true;
+      }
+      return usuarioValido;
     }
     public void darAltaUsuario(String uvus, String password){
       Usuario usuario_temp = new Usuario(uvus, password);
       usuarios.add(usuario_temp);
     }
     public void darBajaUsuario(String uvus){
-      Iterator<Usuario> iterador = usuarios.descendingIterator();
-      while(iterador.hasNext()){
-        Usuario usuario_temp = iterador.next();
-        if(usuario_temp.getUvus().equals(uvus)){
-          iterador.remove();
+      for (Usuario usuario : this.usuarios) {
+        if(usuario.getUvus().equals(uvus)){
+          this.usuarios.remove(usuario);
         }
       }
     }
     public void modificarUsuario(String uvus, String new_password){
-      Iterator<Usuario> iterador = usuarios.descendingIterator();
-      while(iterador.hasNext()){
-        Usuario usuario_temp = iterador.next();
-        if(usuario_temp.getUvus().equals(uvus)){
-          iterador.remove();
+      for (Usuario usuario : this.usuarios) {
+        if(usuario.getUvus().equals(uvus)){
+          this.usuarios.remove(usuario);
           this.darAltaUsuario(uvus, new_password);
         }
       }
     }
     public void modificarUsuario(String uvus, String new_uvus, String password){
-      Iterator<Usuario> iterador = usuarios.descendingIterator();
-      while(iterador.hasNext()){
-        Usuario usuario_temp = iterador.next();
-        if(usuario_temp.getUvus().equals(uvus)){
-          iterador.remove();
+      for (Usuario usuario : this.usuarios) {
+        if(usuario.getUvus().equals(uvus)){
+          this.usuarios.remove(usuario);
           this.darAltaUsuario(new_uvus, password);
         }
       }
