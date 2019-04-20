@@ -15,7 +15,7 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
       usuarios= new LinkedList<Usuario>();
     }
 
-    public boolean iniciarSesion(String uvus, String password){
+    public boolean iniciarSesion(String uvus, String password) throws RemoteException {
       boolean usuarioValido = false;
       for (Usuario usuario : this.usuarios) {
         if (usuario.getUvus().equals(uvus) && usuario.getPassword().equals(password))
@@ -23,7 +23,7 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
       }
       return usuarioValido;
     }
-    public void darAltaUsuario(String uvus, String password){
+    public void darAltaUsuario(String uvus, String password) throws RemoteException {
       Usuario usuario_temp = new Usuario(uvus, password);
       usuarios.add(usuario_temp);
     }
@@ -34,7 +34,7 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
         }
       }
     }
-    public void modificarUsuario(String uvus, String new_password){
+    public void modificarUsuario(String uvus, String new_password) throws RemoteException {
       for (Usuario usuario : this.usuarios) {
         if(usuario.getUvus().equals(uvus)){
           this.usuarios.remove(usuario);
@@ -42,7 +42,7 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
         }
       }
     }
-    public void modificarUsuario(String uvus, String new_uvus, String password){
+    public void modificarUsuario(String uvus, String new_uvus, String password) throws RemoteException {
       for (Usuario usuario : this.usuarios) {
         if(usuario.getUvus().equals(uvus)){
           this.usuarios.remove(usuario);

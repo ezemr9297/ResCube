@@ -51,7 +51,7 @@ class ClienteReserva {
             // Se sale de la aplicación
             if (option.equals("3")){
               System.out.println("\nGracias por utilizar ResCube!\n");
-              System.exit(1);
+              System.exit(0);
             }
             else {
               // Solicitamos datos para el inicio de sesión o la creación del usuario
