@@ -4,8 +4,11 @@ import java.io.Console;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.Scanner;
+import java.util.Map;
+import java.util.List;
 
 import servidor.services.interfaces.*;
+import servidor.services.*;
 import servidor.model.*;
 
 class ClienteReserva {
@@ -28,14 +31,14 @@ class ClienteReserva {
             // Se comienza a mostrar la interfaz del cliente
             System.out.println("********* Bienvenido a ResCube, el sistema de reserva de salas de la incubadora ***********\n");
             System.out.println("Inicie sesión o cree un usuario para continuar\n");
-            ServicioLogIn login = srv.creaLogin();
+            ServicioLogIn login = srv.obtenerLogIn();
             // Se crea el lector de entrada del usuario
             Scanner scanner = new Scanner(System.in);
             String option = null; // número de opción introducido por el usuario
 
             // Se solicita una opción hasta que coincida con las ofrecidas
             do {
-              if (option)
+              if (option != null)
                 System.out.println("Lo siento, el carácter introducido no coincide con ninguna de las opciones (1, 2, 3).\n Pruebe otra vez. \n");
 
               System.out.println("1.- Iniciar sesión\n");
@@ -66,15 +69,15 @@ class ClienteReserva {
                   correcto = login.iniciarSesion(uvus,password);
                   if (!correcto) {
                     System.out.println("Lo siento, el usuario o la contraseña introducidos no es válido, prueba otra vez:\n");
-                    String uvus = new String (terminal.readLine("Introduce uvus: "));
-                    String password = new String (terminal.readPassword("Intruduce contraseña: "));
+                    uvus = new String (terminal.readLine("Introduce uvus: "));
+                    password = new String (terminal.readPassword("Intruduce contraseña: "));
                   }
                 } while(!correcto);
 
               }
               // Se inicia el menú con la información del usuario
               Usuario usuario = new Usuario(uvus, password);
-              this.startMenu(usuario);
+              startMenu(usuario);
             }
         }
         catch (RemoteException e) {
@@ -86,7 +89,7 @@ class ClienteReserva {
         }
     }
 
-    private static void startMenu(Usuario usuario) {
+    private static void startMenu(Usuario usuario) throws RemoteException {
       // Se crea el lector de entrada del usuario
       Scanner scanner = new Scanner(System.in);
       String option = null; // número de opción introducido por el usuario
@@ -103,13 +106,13 @@ class ClienteReserva {
 
         switch (option) {
           case "1":
-            this.menuSalas(usuario);
+            menuSalas(usuario);
             break;
           case "2":
-            this.mostrarHistorial(usuario);
+            mostrarHistorial(usuario);
             break;
           case "3":
-            this.menuModificarUsuario(usuario);
+            menuModificarUsuario(usuario);
             break;
           case "4":
             System.out.println("\nGracias por utilizar ResCube!\n");
@@ -121,7 +124,7 @@ class ClienteReserva {
 
     }
 
-    private static void menuSalas(Usuario usuario) {
+    private static void menuSalas(Usuario usuario) throws RemoteException {
       // Se crea el lector de entrada del usuario
       Scanner scanner = new Scanner(System.in);
       String option = null; // número de opción introducido por el usuario
@@ -139,7 +142,7 @@ class ClienteReserva {
         switch (option) {
           case "0":
           case "1":
-            dia = Integer.parseInt(option);
+            int dia = Integer.parseInt(option);
             // Se obtiene el calendario de hoy o mañana
             calendario = srv.verSalas(dia, usuario.getUvus());
             // Se imprime la disponibilidad de salas para el día solicitado
@@ -162,13 +165,15 @@ class ClienteReserva {
             do {
               System.out.println("Indica si quieres reservar (0) ó borrar una reserva (1): ");
               option = scanner.nextLine();
-            } while (!(option.equals("0") || option.equals("1"));
+            } while (!(option.equals("0") || option.equals("1")));
             // Se solicitan los datos de la sala y turno a reservar
+            int numSala;
+            int numTurno;
             do {
               System.out.println("Indica la sala: ");
-              int numSala = scanner.nextInt();
+              numSala = scanner.nextInt();
               System.out.println("Indica el turno: ");
-              int numTurno = scanner.nextInt();
+              numTurno = scanner.nextInt();
             } while (!(numSala > 0 && numSala < 9) || !(numTurno >= 0 && numTurno < 6));
             // Se procede a reservar o borrar
             boolean permitido;
@@ -192,17 +197,18 @@ class ClienteReserva {
       } while(true);
     }
 
-    private static void mostrarHistorial(Usuario usuario){
+    private static void mostrarHistorial(Usuario usuario) throws RemoteException {
       List<Registro> historial = srv.obtenerServRegistro().getHistorial(usuario.getUvus());
       for(Registro temp: historial) {
         System.out.println(temp);
       }
     }
-    private static void menuModificarUsuario(Usuario usuario){
+
+    private static void menuModificarUsuario(Usuario usuario) throws RemoteException{
       Scanner scanner = new Scanner(System.in);
       String option = null;
       do {
-        if(option){
+        if(option != null){
           System.out.println("Lo siento, el carácter introducido no coincide con ninguna de las opciones (1, 2, 3).\n Pruebe otra vez. \n");
         }
         System.out.println("1.- Modificar contraseña\n");
@@ -219,26 +225,26 @@ class ClienteReserva {
       else {
         //Primero de todos para modificar un usuario comprobamos que sus credenciales son correctas
         Console terminal = System.console();
-        String uvus = new String (terminal.readLine("Introduzca de nuevo el uvus: "));
-        String password = new String (terminal.readPassword("Intruduzca la contraseña actual: "));
-        ServicioLogIn login = srv.creaLogin();
+        String mod_uvus = new String (terminal.readLine("Introduzca de nuevo el uvus: "));
+        String mod_password = new String (terminal.readPassword("Intruduzca la contraseña actual: "));
+        ServicioLogIn login = srv.obtenerLogIn();
         boolean correcto;
         do {
-          correcto = login.iniciarSesion(uvus,password);
+          correcto = login.iniciarSesion(mod_uvus,mod_password);
           if (!correcto) {
             System.out.println("Lo siento, el usuario o la contraseña introducidos no es válido, pruebe otra vez.\n");
-            String uvus = new String (terminal.readLine("Introduce uvus: "));
-            String password = new String (terminal.readPassword("Intruduce contraseña: "));
+            mod_uvus = new String (terminal.readLine("Introduce uvus: "));
+            mod_password = new String (terminal.readPassword("Intruduce contraseña: "));
           }
         } while(!correcto);
         //Una vez comprobadas las credenciales procedemos a modificar
         if(option.equals("1")) { //Si queremos cambiar la contraseña
           String new_password = new String (terminal.readPassword("Intruduzca la nueva contraseña: "));
-          login.modificarUsuario(uvus, new_password);
+          login.modificarUsuario(mod_uvus, new_password);
         }
         else { //Si queremos cambiar el uvus
           String new_uvus = new String (terminal.readLine("Intruduce el nuevo uvus: "));
-          login.modificarUsuario(uvus, new_uvus, password);
+          login.modificarUsuario(mod_uvus, new_uvus, mod_password);
         }
         System.out.println("Modificación realizada con éxito\n");
         return;

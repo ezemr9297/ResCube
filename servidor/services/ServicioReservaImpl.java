@@ -95,7 +95,7 @@ public class ServicioReservaImpl extends UnicastRemoteObject implements Servicio
     return permitido;
   }
 
-  public ServicioLogIn creaLogIn() throws RemoteException {
+  public ServicioLogIn obtenerLogIn() throws RemoteException {
     return this.login;
   }
 
