@@ -16,7 +16,7 @@ class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, Ser
     }
 
     public boolean iniciarSesion(String uvus, String password){
-      boolean usuarioValido;
+      boolean usuarioValido = false;
       for (Usuario usuario : this.usuarios) {
         if (usuario.getUvus().equals(uvus) && usuario.getPassword().equals(password))
           usuarioValido = true;
