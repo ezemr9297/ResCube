@@ -8,7 +8,7 @@ import java.util.*;
 import servidor.model.*;
 import servidor.services.interfaces.*;
 
-class ServicioLogInImpl extends UnicastRemoteObject implements Serializable, ServicioLogIn {
+class ServicioLogInImpl extends UnicastRemoteObject implements ServicioLogIn {
     LinkedList <Usuario> usuarios;
 
     public ServicioLogInImpl() throws RemoteException {

@@ -101,7 +101,7 @@ class ClienteReserva {
         System.out.println("2.- Obtener historial\n");
         System.out.println("3.- Modificar usuario\n");
         System.out.println("4.- Salir\n");
-        System.out.println("Introduce una opción: ");
+        System.out.print("Introduce una opción: ");
         option = scanner.nextLine();
 
         switch (option) {
@@ -136,7 +136,7 @@ class ClienteReserva {
         System.out.println("0.- Hoy\n");
         System.out.println("1.- Mañana\n");
         System.out.println("2.- Volver al menú principal\n");
-        System.out.println("Introduce una opción: ");
+        System.out.print("Introduce una opción: ");
         option = scanner.nextLine();
 
         switch (option) {
@@ -146,49 +146,46 @@ class ClienteReserva {
             // Se obtiene el calendario de hoy o mañana
             calendario = srv.verSalas(dia, usuario.getUvus());
             // Se imprime la disponibilidad de salas para el día solicitado
-            System.out.println("\t8-10:00 (0) \t10-12:00 (1)\t12-14:00 (2)\t14-16:00 (3)\t16-18:00 (4)\t18-20:00 (5)\n");
+            System.out.println("\t8-10:00 (1) \t10-12:00 (2)\t12-14:00 (3)\t14-16:00 (4)\t16-18:00 (5)\t18-20:00 (6)\n");
             System.out.println("\n");
             String res;
             for (Map.Entry<String, Sala> sala : calendario.getSalas().entrySet()) {
-              System.out.println(sala.getKey());
+              System.out.print(sala.getKey() + "\t");
               for (Map.Entry<String, Turno> turno : sala.getValue().getTurnos().entrySet()) {
                 if(turno.getValue().getReservado())
-                  res="Libre";
+                  res="Ocupada\t";
                 else
-                  res="Ocupada";
-                System.out.println(res + "\t\t");
+                  res="Libre\t\t";
+                System.out.print("  "+res);
               }
-              System.out.println("\n");
               System.out.println("\n");
             }
             // Se pregunta si desea hacer o borrar una reserva
             do {
-              System.out.println("Indica si quieres reservar (0) ó borrar una reserva (1): ");
+              System.out.print("Indica si quieres reservar (0) ó borrar una reserva (1): ");
               option = scanner.nextLine();
             } while (!(option.equals("0") || option.equals("1")));
             // Se solicitan los datos de la sala y turno a reservar
             int numSala;
             int numTurno;
             do {
-              System.out.println("Indica la sala: ");
-              numSala = scanner.nextInt();
-              System.out.println("Indica el turno: ");
-              numTurno = scanner.nextInt();
-            } while (!(numSala > 0 && numSala < 9) || !(numTurno >= 0 && numTurno < 6));
+              System.out.print("Indica la sala: ");
+              numSala = Integer.parseInt(scanner.nextLine());
+              System.out.print("Indica el turno: ");
+              numTurno = Integer.parseInt(scanner.nextLine());
+            } while (!(numSala > 0 && numSala < 9) || !(numTurno > 0 && numTurno < 7));
             // Se procede a reservar o borrar
             boolean permitido;
             if (option.equals("0")) // reservar
-              permitido = srv.reservarSala(dia, numSala-1, numTurno, usuario.getUvus());
+              permitido = srv.reservarSala(dia, numSala-1, numTurno-1, usuario.getUvus());
             else // borrar reserva
-              permitido = srv.borrarReserva(dia, numSala-1, numTurno, usuario.getUvus());
+              permitido = srv.borrarReserva(dia, numSala-1, numTurno-1, usuario.getUvus());
 
             if (permitido)
               System.out.println("Operación realizada con éxito!\n");
             else
               System.out.println("Operación fallida! Consulta historial para más detalles\n");
 
-            System.out.println("Selecciona el día\n");
-            break;
           case "2":
             return;
           default:
@@ -212,9 +209,9 @@ class ClienteReserva {
           System.out.println("Lo siento, el carácter introducido no coincide con ninguna de las opciones (1, 2, 3).\n Pruebe otra vez. \n");
         }
         System.out.println("1.- Modificar contraseña\n");
-        System.out.println("2.- Modificar usuario y contraseña\n");
+        System.out.println("2.- Modificar uvus\n");
         System.out.println("3.- Volver al menú principal\n");
-        System.out.println("Introduce una opción: ");
+        System.out.print("Introduce una opción: ");
         option = scanner.nextLine();
       } while(!(option.equals("1") || option.equals("2") || option.equals("3")));
 
@@ -223,28 +220,26 @@ class ClienteReserva {
         return;
       }
       else {
+        ServicioLogIn login = srv.obtenerLogIn();
         //Primero de todos para modificar un usuario comprobamos que sus credenciales son correctas
         Console terminal = System.console();
-        String mod_uvus = new String (terminal.readLine("Introduzca de nuevo el uvus: "));
-        String mod_password = new String (terminal.readPassword("Intruduzca la contraseña actual: "));
-        ServicioLogIn login = srv.obtenerLogIn();
+        //String mod_uvus = new String (terminal.readLine("Introduzca de nuevo el uvus: "));
+        String mod_password;
         boolean correcto;
         do {
-          correcto = login.iniciarSesion(mod_uvus,mod_password);
-          if (!correcto) {
-            System.out.println("Lo siento, el usuario o la contraseña introducidos no es válido, pruebe otra vez.\n");
-            mod_uvus = new String (terminal.readLine("Introduce uvus: "));
-            mod_password = new String (terminal.readPassword("Intruduce contraseña: "));
-          }
+          mod_password = new String (terminal.readPassword("Intruduzca la contraseña actual: "));
+          correcto = usuario.getPassword().equals(mod_password);
+          if (!correcto)
+            System.out.println("Lo siento, la contraseña introducida no es válida, pruebe otra vez.\n");
         } while(!correcto);
         //Una vez comprobadas las credenciales procedemos a modificar
         if(option.equals("1")) { //Si queremos cambiar la contraseña
           String new_password = new String (terminal.readPassword("Intruduzca la nueva contraseña: "));
-          login.modificarUsuario(mod_uvus, new_password);
+          login.modificarUsuario(usuario.getUvus(), new_password);
         }
         else { //Si queremos cambiar el uvus
           String new_uvus = new String (terminal.readLine("Intruduce el nuevo uvus: "));
-          login.modificarUsuario(mod_uvus, new_uvus, mod_password);
+          login.modificarUsuario(usuario.getUvus(), new_uvus, mod_password);
         }
         System.out.println("Modificación realizada con éxito\n");
         return;
