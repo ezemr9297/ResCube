@@ -1,9 +1,10 @@
 package servidor.model;
 
+import java.io.Serializable;
 import java.util.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-public class Calendario extends Serializable {
+public class Calendario implements Serializable {
 
   public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
   public static final String [] dias = {"HOY", "MAÑANA"};
@@ -13,7 +14,7 @@ public class Calendario extends Serializable {
 
   public Calendario(){
     uvusReservantes = new ArrayList<String> ();
-    salas = new HashMap<String,Sala>();
+    salas = new LinkedHashMap<String,Sala>();
     // Creamos las salas y le asignamos un nombre
     for (String nomSala : Sala.nomSalas) {
       salas.put(nomSala, new Sala());

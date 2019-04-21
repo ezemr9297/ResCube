@@ -1,12 +1,15 @@
 package servidor.model;
 
-public class Turno {
+import java.io.Serializable;
+
+public class Turno implements Serializable {
 
   private boolean reservado;
   private String uvusReservante;
 
   public Turno() {
     reservado = false;
+    uvusReservante = "";
   }
 
   public void setReservado(String uvus) {
@@ -21,7 +24,7 @@ public class Turno {
 
   public boolean comprobarReserva(String uvus) {
     boolean result = false;
-    if(this.uvusReservante == uvus){
+    if(this.uvusReservante.equals(uvus)){
       result = true;
     }
     return result;
