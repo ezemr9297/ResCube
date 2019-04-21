@@ -3,7 +3,7 @@ package servidor.model;
 import java.util.*;
 import java.util.HashMap;
 
-public class Calendario {
+public class Calendario extends Serializable {
 
   public static final String [] nomSalas = {"SALA 1","SALA 2","SALA 3","SALA 4","SALA 5","SALA 6","SALA 7","SALA 8"};
   public static final String [] dias = {"HOY", "MAÑANA"};
